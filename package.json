@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "home-away",
+=======
+  "name": "home-amjad",
+>>>>>>> dea4988 (Bookings completed with DB issues and not finding records)
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -30,7 +34,11 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
     "leaflet": "^1.9.4",
+<<<<<<< HEAD
     "lucide-react": "^0.469.0",
+=======
+    "lucide-react": "^0.471.1",
+>>>>>>> dea4988 (Bookings completed with DB issues and not finding records)
     "next": "14.2.1",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",

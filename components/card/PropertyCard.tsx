@@ -7,8 +7,8 @@ import { PropertyCardProps } from '@/utils/types';
 import { formatCurrency } from '@/utils/format';
 
 export default async function PropertyCard({ property }: { property: PropertyCardProps }) {
-  const { name, image, price } = await property;
-  const { country, id: propertyId, tagline } = await property;
+  const { name, image, price } =  property;
+  const { country, id: propertyId, tagline } =  property;
 
   return (
     <article className='group relative'>

@@ -3,7 +3,7 @@ import { CardSignInButton } from '@/components/form/Buttons';
 import { fetchFavoriteId } from '@/utils/actions';
 import FavoriteToggleForm from './FavoriteToggleForm';
 
-export default async function FavoriteToggleButton(
+async function FavoriteToggleButton(
     { propertyId }: { propertyId: string }
   ) 
   {
@@ -12,9 +12,14 @@ export default async function FavoriteToggleButton(
 
     const favoriteId = await fetchFavoriteId({ propertyId });
   
-    return <FavoriteToggleForm 
-      favoriteId={favoriteId} 
-      propertyId={propertyId} 
-      />;
+    return <FavoriteToggleForm favoriteId={favoriteId} propertyId={propertyId} />;
+
   
 }
+export default FavoriteToggleButton;
+/*
+    return <FavoriteToggleForm 
+    favoriteId={favoriteId} 
+      propertyId={propertyId} 
+      />;
+*/

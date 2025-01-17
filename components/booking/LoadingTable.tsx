@@ -1,7 +1,10 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 
-function LoadingTable({ rows }: { rows?: number }) {
+//
+//
+//
+export default function LoadingTable({ rows }: { rows?: number }) {
   const tableRows = Array.from({ length: rows || 5 }, (_, i) => {
     return (
       <div className='mb-4' key={i}>
@@ -12,4 +15,3 @@ function LoadingTable({ rows }: { rows?: number }) {
   });
   return <>{tableRows}</>;
 }
-export default LoadingTable;

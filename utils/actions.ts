@@ -431,7 +431,7 @@ export async function fetchPropertyRating(propertyId: string) {
 }
 
 //
-// Jan 1st 2025 - Added construces
+// Jan 1st 2025 - Added constructs
 // Booking Section...
 //
 
@@ -447,6 +447,7 @@ export const createBookingAction = async (prevState: {
       paymentStatus: false,
     },
   });
+
   let bookingId: null | string = null;
 
   const { propertyId, checkIn, checkOut } = prevState;
@@ -462,7 +463,6 @@ export const createBookingAction = async (prevState: {
     checkOut,
     price: property.price,
   });
-
   try {
     const booking = await db.booking.create({
       data: {

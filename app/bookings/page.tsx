@@ -28,7 +28,11 @@ async function BookingsPage() {
     <div className='mt-16'>
       <h4 className='mb-4 capitalize'>total bookings : {bookings.length}</h4>
       <Table>
+<<<<<<< HEAD
         <TableCaption>A list of your recent bookings.</TableCaption>
+=======
+        <TableCaption>Recent bookings list.</TableCaption>
+>>>>>>> dea4988 (Bookings completed with DB issues and not finding records)
         <TableHeader>
           <TableRow>
             <TableHead>Property Name</TableHead>
