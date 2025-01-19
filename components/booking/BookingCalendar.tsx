@@ -28,7 +28,7 @@ export default function BookingCalendar() {
   const { toast } = useToast();
   const unavailableDates = generateDisabledDates(blockedPeriods);
 
-  // Record state chages...
+  // Record state changes...
   useEffect(() => {
     const selectedRange = generateDateRange(range);
     const isDisabledDateIncluded = selectedRange.some((date) => {

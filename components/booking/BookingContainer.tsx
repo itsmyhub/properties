@@ -1,8 +1,8 @@
 'use client';
 
 import { useProperty } from '@/utils/store';
-import ConfirmBooking from './ConfirmBooking';
-import BookingForm from './BookingForm';
+import ConfirmBooking from '@/components/booking/ConfirmBooking';
+import BookingForm from '@/components/booking/BookingForm';
 
 export default function BookingContainer() {
   const { range } = useProperty((state) => state);

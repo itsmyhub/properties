@@ -1,3 +1,4 @@
+//'use server';
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton';
 import PropertyRating from '@/components/card/PropertyRating';
 import BreadCrumbs from '@/components/properties/BreadCrumbs';
@@ -15,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import SubmitReview from '@/components/reviews/SubmitReview';
 import PropertyReviews from '@/components/reviews/PropertyReviews';
 import { auth } from '@clerk/nextjs/server';
+
 const DynamicMap = dynamic(
   () => import('@/components/properties/PropertyMap'),
   {
@@ -43,6 +45,9 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
   const isNotOwner = property.profile.clerkId !== userId;
   const reviewDoesNotExist =
     userId && isNotOwner && !(await findExistingReview(userId, property.id));
+
+    console.log(property.bookings)
+
   return (
     <section>
       <BreadCrumbs name={property.name} />

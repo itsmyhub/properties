@@ -2,8 +2,9 @@
 
 import { useProperty } from '@/utils/store';
 import { Booking } from '@/utils/types';
-import BookingCalendar from './BookingCalendar';
-import BookingContainer from './BookingContainer';
+import BookingCalendar from '@/components/booking/BookingCalendar';
+import BookingContainer from '@/components/booking/BookingContainer';
+
 import { useEffect } from 'react';
 
 type BookingWrapperProps = {
@@ -18,8 +19,8 @@ type BookingWrapperProps = {
 export default function BookingWrapper({
   propertyId,
   price,
-  bookings,
-}: BookingWrapperProps) {
+  bookings 
+  }: BookingWrapperProps) {
   useEffect(() => {
     useProperty.setState({
       propertyId,

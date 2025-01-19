@@ -297,7 +297,7 @@ export const fetchPropertyDetails = async (id: string) => {
     },
     include: {
       profile: true,
-      // Jan 1st - ading booking module...
+      // Jan 1st - adding booking module...
         bookings: {
         select: {
           checkIn: true,
@@ -441,13 +441,14 @@ export const createBookingAction = async (prevState: {
   checkOut: Date;
 }) => {
   const user = await getAuthUser();
+/* Remove this remarks when Checkout page is complete...
   await db.booking.deleteMany({
     where: {
       profileId: user.id,
       paymentStatus: false,
     },
   });
-
+*/
   let bookingId: null | string = null;
 
   const { propertyId, checkIn, checkOut } = prevState;
@@ -523,4 +524,175 @@ export async function deleteBookingAction(prevState: { bookingId: string }) {
     return renderError(error);
   }
 }
+
+//  Date: Jan 16th 2025
+//  Adding Rental Module Actions
+//    Fetch and delete rentals...
+
+export const fetchRentals = async () => {
+  const user = await getAuthUser();
+  const rentals = await db.property.findMany({
+    where: {
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      price: true,
+    },
+  });
+
+  const rentalsWithBookingSums = await Promise.all(
+    rentals.map(async (rental) => {
+      const totalNightsSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          totalNights: true,
+        },
+      });
+
+      const orderTotalSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          orderTotal: true,
+        },
+      });
+
+      return {
+        ...rental,
+        totalNightsSum: totalNightsSum._sum.totalNights,
+        orderTotalSum: orderTotalSum._sum.orderTotal,
+      };
+    })
+  );
+
+  return rentalsWithBookingSums;
+};
+
+export async function deleteRentalAction(prevState: { propertyId: string }) {
+  const { propertyId } = prevState;
+  const user = await getAuthUser();
+
+  try {
+    await db.property.delete({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+    });
+
+    revalidatePath('/rentals');
+    return { message: 'Deleted rental...' };
+  } catch (error) {
+    return renderError(error);
+  }
+}
+
+//  Rental Module Actions
+//  Fetch constructs rentals...
+//
+export const fetchRentalDetails = async (propertyId: string) => {
+  const user = await getAuthUser();
+
+  return db.property.findUnique({
+    where: {
+      id: propertyId,
+      profileId: user.id,
+    },
+  });
+};
+
+
+export const updatePropertyAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  const propertyId = formData.get('id') as string;
+
+  try {
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(propertySchema, rawData);
+    await db.property.update({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+      data: {
+        ...validatedFields,
+      },
+    });
+
+    revalidatePath(`/rentals/${propertyId}/edit`);
+    return { message: 'Update Successful' };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+
+export const updatePropertyImageAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  const propertyId = formData.get('id') as string;
+
+  try {
+    const image = formData.get('image') as File;
+    const validatedFields = validateWithZodSchema(imageSchema, { image });
+    const fullPath = await uploadImage(validatedFields.image);
+
+    await db.property.update({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+      data: {
+        image: fullPath,
+      },
+    });
+    revalidatePath(`/rentals/${propertyId}/edit`);
+    return { message: 'Property Image Updated Successful' };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+//  Reservations Actions:
+//  - 01/17/2025 - Fetch Reservations construct...
+//
+
+export const fetchReservations = async () => {
+  const user = await getAuthUser();
+
+  //
+  const reservations = await db.booking.findMany({
+    where: {
+      property: {
+        profileId: user.id,
+      },
+    },
+
+    orderBy: {
+      createdAt: 'desc', // or 'asc' for ascending order
+    },
+
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          country: true,
+        },
+      }, // include property details in the result
+    },
+  });
+  return reservations;
+};
 
