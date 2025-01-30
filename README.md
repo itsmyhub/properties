@@ -28,5 +28,10 @@ Prisma Studio is up on http://localhost:5556
 │    npm i --save-dev prisma@latest                       │
 │    npm i @prisma/client@latest                          │
 └─────────────────────────────────────────────────────────┘
-^C
+
+
+Appointment booking:
+https://github.com/TobiasGleiter/nextjs-appointment-booking
+
+
 

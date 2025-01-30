@@ -670,7 +670,6 @@ export const updatePropertyImageAction = async (
 export const fetchReservations = async () => {
   const user = await getAuthUser();
 
-  //
   const reservations = await db.booking.findMany({
     where: {
       property: {
@@ -679,7 +678,7 @@ export const fetchReservations = async () => {
     },
 
     orderBy: {
-      createdAt: 'desc', // or 'asc' for ascending order
+      createdAt: 'desc'
     },
 
     include: {
