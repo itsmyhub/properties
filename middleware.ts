@@ -1,8 +1,9 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
-import { createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 //import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 // Define protected routes
+/*
 const isProtectedRoute = createRouteMatcher([
   '/bookings(.*)',
   '/checkout(.*)',
@@ -11,10 +12,20 @@ const isProtectedRoute = createRouteMatcher([
   '/rentals(.*)',
   '/reviews(.*)',
 ]);
+*/
 
+//Added new route on Jan 31st 2025
+const isPublicRoute = createRouteMatcher(['/', '/properties(.*)']);
+const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth().protect()
+//  console.log(auth().userId);
+  const isAdminUser = auth().userId === process.env.ADMIN_USER_ID;
+    if (isAdminRoute(req) && !isAdminUser) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  if (!isPublicRoute(req)) auth().protect()
 })
 
 export const config = {

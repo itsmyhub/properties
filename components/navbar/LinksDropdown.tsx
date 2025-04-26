@@ -5,18 +5,26 @@
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { LuAlignLeft } from 'react-icons/lu';
+
 import Link from 'next/link';
-import { Button } from '../ui/button';
 import UserIcon from './UserIcon';
-import { links } from '@/utils/links';
 import SignOutLink from './SignOutLink';
+
+import { LuAlignLeft } from 'react-icons/lu';
+import { Button } from '../ui/button';
+import { links } from '@/utils/links';
 import { SignedOut, SignedIn } from '@clerk/nextjs';
 import { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs'
 
+//Added new route on Jan 31st 2025
+import {auth} from '@clerk/nextjs/server'
 
+export default  function LinksDropdown() {
 
-export default function LinksDropdown() {
+  //Added new route on Jan 31st 2025
+  const { userId } = auth();
+  const isAdminUser = userId === process.env.ADMIN_USER_ID;
+  //
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -42,23 +50,26 @@ export default function LinksDropdown() {
 
           </DropdownMenuItem>
         </SignedOut>
+        
         <SignedIn>
 
           {links.map((link) => {
-            return (
-              <DropdownMenuItem key={link.href}>
-                <Link href={link.href} className='capitalize w-full'>
-                  {link.label}
-                </Link>
-              </DropdownMenuItem>
-            );
-            })
-          }
-        </SignedIn>
-        <DropdownMenuSeparator/>
-        <DropdownMenuItem>
-          <SignOutLink/>
-        </DropdownMenuItem>
+              //Added new route on Jan 31st 2025
+              if (link.label === 'admin' && !isAdminUser) return null;
+              return (
+                <DropdownMenuItem key={link.href}>
+                  <Link href={link.href} className='capitalize w-full'>
+                    {link.label}
+                  </Link>
+                </DropdownMenuItem>
+              );
+            })}
+            
+          <DropdownMenuSeparator/>
+            <DropdownMenuItem>
+              <SignOutLink/>
+            </DropdownMenuItem>
+          </SignedIn>
 
       </DropdownMenuContent>
     </DropdownMenu>
